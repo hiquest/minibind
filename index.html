@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>minibind test project</title>
+
+    <link rel="stylesheet" href="vendor/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body mb-app="showSearchApp">
+
+<div class="container">
+    <header>
+        <h3>minibind example project</h3>
+    </header>
+
+    <div id="main" mb-scope="searchPage">
+        <div class="row">
+            <div class="col-sm-4">
+                <input type="text" id='searchTerm' class="form-control" placeholder="Enter title here" />
+            </div>
+            <div class="col-sm-8">
+                <div class="results" mb-bind="searchResults">
+                    {{#each searchResults}}
+                        <div class="item">
+                            {{ title }}
+                        </div>
+                    {{else}}
+                        <div class="noData">No results found.</div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/js/jquery-2.1.1.min.js"></script>
+<script src="vendor/js/handlebars-v2.0.0.js"></script>
+<script src="vendor/js/underscore.min.js"></script>
+<script src="src/minibind.js"></script>
+<script src="src/app.js"></script>
+
+</body>
+
+</html>
