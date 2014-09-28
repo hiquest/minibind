@@ -6,16 +6,29 @@
     // Scope store for search page, we're putting it into the `app`
     var searchPage = app.searchPage = {};
 
-    // Some data
+    // Initially search results is empty
     searchPage.searchResults = [];
 
-    var onSearchInput = function() {
-        searchPage.searchResults.push({title: 'Title 1'});
-        searchPage.searchResults.push({title: 'Title 2'});
-        searchPage.searchResults.push({title: 'Title 3'});
-    };
+    // Listening for user input
+    onChangeDebounced('#searchTerm', queryForShows);
 
-    $('#searchTerm').on('input propertychange paste', _.debounce(onSearchInput, 700));
+    function queryForShows() {
 
+        ifVal('#searchTerm')
+            .then(fireQuery)
+            .else(resetFilter);
 
-})m();
+        function resetFilter() {
+            searchPage.searchResults.length = 0;
+        }
+
+        function fireQuery(term) {
+            $.get( "http://localhost:3000/tvdb/query?query=" + term, function(data) {
+                data.forEach(function(i) {
+                    searchPage.searchResults.push(i);
+                });
+            });
+        }
+    }
+
+})();
