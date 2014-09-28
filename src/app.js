@@ -19,14 +19,12 @@
             .else(resetFilter);
 
         function resetFilter() {
-            searchPage.searchResults.length = 0;
+            searchPage.searchResults = [];
         }
 
         function fireQuery(term) {
             $.get( "http://localhost:3000/tvdb/query?query=" + term, function(data) {
-                data.forEach(function(i) {
-                    searchPage.searchResults.push(i);
-                });
+                searchPage.searchResults = data;
             });
         }
     }

@@ -1,5 +1,7 @@
 (function(w) {
 
+    w.deepObserve = deepObserve;
+
     function deepObserve(observable, onChange) {
 
         innerObserve(observable, observable, onChange);
@@ -26,6 +28,11 @@
 
     }
 
-    w.deepObserve = deepObserve;
+    // Helpers
+    function by(name, value) {
+        return function(x) {
+            return x[name] === value;
+        }
+    }
 
 })(window);

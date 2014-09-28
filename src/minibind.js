@@ -4,9 +4,7 @@
     // TODO: choose template engine
 
     // building a caching storage for apps;
-    w.minibind = _.memoize(function () {
-        return {};
-    });
+    w.minibind = _.memoize(function () { return {}; });
 
     $(function () {
         var views = _.map($('[mb-bind]'), bindView);
@@ -37,12 +35,12 @@
 
     View.prototype.render = function () {
 
-        var bindingKeyValue = (function (name) {
+        var keyValue = (function (name) {
             var value = minibind(this.app)[this.scope][name];
             return [name, value];
         }).bind(this);
 
-        var data = _.object(_.map(this.bindings, bindingKeyValue));
+        var data = _.object(_.map(this.bindings, keyValue));
 
         this.$el.html(this.template(data));
     };
@@ -59,19 +57,17 @@
 
             var scope = minibind(app)[scopeName];
 
-
             var onScopeChange = function (changes) {
                 changes.forEach(function (change) {
+                    var viewsToRerender = _.filter(views, function(view) {
+                        return (_.contains(view.bindings, change.name) && view.scope == scopeName && view.app == app)
+                    });
 
-                    _.chain(views).filter(views, function (view) {
-                        return (view.bindings.contains(change.name) && view.scope == scopeName && view.app == app)
-                    }).each(invoke('render'));
-
+                    _.each(viewsToRerender, invoke('render'));
                 });
             };
 
-            Object.observe(scope, onScopeChange);
-
+            deepObserve(scope, onScopeChange);
         });
     }
 
@@ -79,12 +75,6 @@
     function invoke(name) {
         return function (x) {
             x[name]();
-        }
-    }
-
-    function by(name, value) {
-        return function(x) {
-            return x[name] === value;
         }
     }
 
