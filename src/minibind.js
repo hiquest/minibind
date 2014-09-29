@@ -6,12 +6,19 @@
     w.minibind = _.memoize(function () { return {}; });
 
     $(function () {
-        var views = _.map($('[mb-bind]'), bindView);
+
+        // Building views-wrappers for every element with mb-bind
+        var views = _.map($('[mb-bind]'), buildView);
+
+        // Calling initial rendering on each view
         _.each(views, invoke('render'));
+
+        // Observing scopes for rendering on each change
         observeScopes(views);
+
     });
 
-    function bindView(el) {
+    function buildView(el) {
 
         var bindings = $(el).attr('mb-bind').split(',');
 
