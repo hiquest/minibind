@@ -1,6 +1,5 @@
 (function (w) {
 
-    // TODO: watch only scope, not individual objects
     // TODO: choose template engine
 
     // building a caching storage for apps;

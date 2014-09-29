@@ -7,24 +7,22 @@
     var searchPage = app.searchPage = {};
 
     // Initially search results is empty
-    searchPage.searchResults = [];
+    searchPage.results = [];
 
     // Listening for user input
     onChangeDebounced('#searchTerm', queryForShows);
 
     function queryForShows() {
 
-        ifVal('#searchTerm')
-            .then(fireQuery)
-            .else(resetFilter);
+        ifVal('#searchTerm').then(fireQuery).else(resetFilter);
 
         function resetFilter() {
-            searchPage.searchResults = [];
+            searchPage.results = [];
         }
 
         function fireQuery(term) {
             $.get( "http://localhost:3000/tvdb/query?query=" + term, function(data) {
-                searchPage.searchResults = data;
+                searchPage.results = data;
             });
         }
     }
