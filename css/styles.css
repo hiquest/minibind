@@ -7,4 +7,19 @@
     background-color: white;
     color: #545454;
     margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.results .item .poster {
+    width: 80px;
+    float: left;
+    margin-right: 15px;
+}
+
+.results .item .info {
+
+}
+
+.results .item .info .title {
+    font-size: 22px;
 }

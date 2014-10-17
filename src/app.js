@@ -1,24 +1,27 @@
 (function () {
 
-    // Global data store, it will create one if it doesn't exists
-    var app = minibind('showSearchApp');
+    // Global data store
+    var moviesApp = window.moviesApp = { };
 
-    // Scope store for search page, we're putting it into the `app`
-    var searchPage = app.searchPage = {};
+    // One of the "scopes" to watch
+    var searchPage = moviesApp.searchPage = { };
 
-    // Initially search results are empty
-    searchPage.results = [];
+    // Initial array initialization
+    searchPage.results = [ ];
 
     // Listening for user input
-    onChangeDebounced('#searchTerm', queryForShows);
+    $("#searchTerm").on('input propertychange paste', _.debounce(queryForShows, 700));
 
     function queryForShows() {
 
-        var term = $('#searchTerm').val();
+        var query = $('#searchTerm').val();
 
-        if (term) {
-            $.get( "http://localhost:3000/tvdb/query?query=" + term, function(data) {
-                searchPage.results = data;
+        if (query) {
+
+            var data = { query: query, api_key: 'e9b8a919d917289a7ddbcfddb8f55ae5' };
+
+            $.get( "http://api.themoviedb.org/3/search/movie?" + $.param(data), function(data) {
+                searchPage.results = data.results;
             });
         } else {
             // clearing search results

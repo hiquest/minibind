@@ -1,9 +1,4 @@
-(function (w) {
-
-    // TODO: choose template engine
-
-    // building a caching storage for apps;
-    w.minibind = _.memoize(function () { return {}; });
+(function () {
 
     $(function () {
 
@@ -22,18 +17,14 @@
 
         var bindings = $(el).attr('mb-bind').split(',');
 
-        var app = $(el).parents('[mb-app]').attr('mb-app');
-        if (!app) error('Binding is outside of app declaration (mb-app is missing)');
-
         var scope = $(el).parents('[mb-scope]').attr('mb-scope');
         if (!scope) error('Binding is outside of scope (mb-scope is missing)');
 
-        return new View($(el), app, scope, bindings);
+        return new View($(el), scope, bindings);
     }
 
-    function View($el, app, scope, bindings) {
+    function View($el, scope, bindings) {
         this.$el = $el;
-        this.app = app;
         this.scope = scope;
         this.template = Handlebars.compile($el.html());
         this.bindings = bindings;
@@ -42,7 +33,7 @@
     View.prototype.render = function () {
 
         var keyValue = (function (name) {
-            var value = minibind(this.app)[this.scope][name];
+            var value = onWindow(this.scope)[name];
             return [name, value];
         }).bind(this);
 
@@ -58,15 +49,12 @@
 
             var scopeName = $(el).attr('mb-scope');
 
-            var app = $(el).parents('[mb-app]').attr('mb-app');
-            if (!app) error('Scope is outside of app declaration (mb-app is missing)');
-
-            var scope = minibind(app)[scopeName];
+            var scope = onWindow(scopeName);
 
             var onScopeChange = function (changes) {
                 changes.forEach(function (change) {
                     var viewsToRerender = _.filter(views, function(view) {
-                        return (_.contains(view.bindings, change.name) && view.scope == scopeName && view.app == app)
+                        return (_.contains(view.bindings, change.name) && view.scope == scopeName)
                     });
 
                     _.each(viewsToRerender, invoke('render'));
@@ -88,4 +76,15 @@
         throw msg;
     }
 
-})(window);
+    function valueFrom(obj, str) {
+        str = str.split(".");
+        for (var i = 0; i < str.length; i++)
+            obj = obj[str[i]];
+        return obj;
+    }
+
+    function onWindow(str) {
+        return valueFrom(window, str);
+    }
+
+})();

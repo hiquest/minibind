@@ -5,21 +5,21 @@
 <head>
     <meta charset="utf-8">
 
-    <title>minibind test project</title>
+    <title>minibind example project</title>
 
     <link rel="stylesheet" href="vendor/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
 
 </head>
 
-<body mb-app="showSearchApp">
+<body>
 
 <div class="container">
     <header>
         <h3>minibind example project</h3>
     </header>
 
-    <div id="main" mb-scope="searchPage">
+    <div id="main" mb-scope="moviesApp.searchPage">
         <div class="row">
             <div class="col-sm-4">
                 <input type="text" id='searchTerm' class="form-control" placeholder="Enter title here" />
@@ -28,10 +28,17 @@
                 <div class="results" mb-bind="results">
                     {{#each results}}
                         <div class="item">
-                            <div class="banner">
+                            <div class="poster">
                                 <a href="http://thetvdb.com/?tab=series&id={{tvdb_id}}" target="_blank">
-                                    <img title="{{title}}" src="http://thetvdb.com/banners/{{banner}}" class="img-responsive"/>
+                                    <img title="{{title}}" src="http://image.tmdb.org/t/p/w154{{poster_path}}" class="img-responsive"/>
                                 </a>
+                            </div>
+                            <div class="info">
+                                <div class="title">{{ title }}</div>
+                                <div>
+                                    <b>Aired on: </b>
+                                    <span>{{release_date}}</span>
+                                </div>
                             </div>
                         </div>
                     {{else}}
